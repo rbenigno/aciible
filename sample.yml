@@ -10,4 +10,4 @@
         apic_url={{ url }}
         apic_user={{ username }}
         apic_pass={{ password }}
-        tenant="ACILab01"
+        tenant="ACILab02"

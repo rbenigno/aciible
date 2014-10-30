@@ -6,7 +6,7 @@ module: createtenant
 version_added: 0.1
 short_description: Create a tenant
 description:
-   - Creates a new tenant in ACI
+   - Creates a new tenant
 author: Ryan Benigno
 '''
 
@@ -18,29 +18,31 @@ def createnewtenant(module):
   import getopt
   import acitoolkit.acitoolkit as ACI
 
+
+  # Connection information for the APIC
   URL = module.params['apic_url']
   USERID = module.params['apic_user']
   PASSWORD = module.params['apic_pass']
 
+  # Create a session to the APIC
   session = ACI.Session(URL, USERID, PASSWORD)
   resp = session.login()
-
   if not resp.ok:
-    module.fail_json(msg='Could not login to APIC') 
+    module.fail_json(msg='Could not login to APIC')
 
+  # Create a tentant object with the new tenant name
   tenant = ACI.Tenant(module.params['tenant'])
 
   # Check if the tenant already exists
   if ACI.Tenant.exists(session, tenant):
     module.exit_json(changed=False)
 
-
+  # Create the new tenant
   resp = session.push_to_apic(tenant.get_url(), data=tenant.get_json())
   if resp.ok:
     module.exit_json(changed=True)
   else:
     module.fail_json(msg="Could not create: %s" % tenant_name)
-
 
 ### ---------------------------------------------------------------------------
 ### MAIN
