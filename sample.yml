@@ -1,0 +1,13 @@
+---
+- name: Create a tenant
+  hosts: apic
+  connection: local
+  gather_facts: no
+
+  tasks: 
+    - name: Create tenant
+      createtenant:
+        apic_url={{ url }}
+        apic_user={{ username }}
+        apic_pass={{ password }}
+        tenant="ACILab01"

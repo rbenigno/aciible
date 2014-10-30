@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+
+DOCUMENTATION = '''
+---
+module: createtenant
+version_added: 0.1
+short_description: Create a tenant
+description:
+   - Creates a new tenant in ACI
+author: Ryan Benigno
+'''
+
+def createnewtenant(module):
+
+  results = {}
+
+  import sys
+  import getopt
+  import acitoolkit.acitoolkit as ACI
+
+  URL = module.params['apic_url']
+  USERID = module.params['apic_user']
+  PASSWORD = module.params['apic_pass']
+
+  session = ACI.Session(URL, USERID, PASSWORD)
+  resp = session.login()
+
+  if not resp.ok:
+    module.fail_json(msg='Could not login to APIC') 
+
+  tenant = ACI.Tenant(module.params['tenant'])
+
+  # Check if the tenant already exists
+  if ACI.Tenant.exists(session, tenant):
+    module.exit_json(changed=False)
+
+
+  resp = session.push_to_apic(tenant.get_url(), data=tenant.get_json())
+  if resp.ok:
+    module.exit_json(changed=True)
+  else:
+    module.fail_json(msg="Could not create: %s" % tenant_name)
+
+
+### ---------------------------------------------------------------------------
+### MAIN
+### ---------------------------------------------------------------------------
+
+def main():
+  module = AnsibleModule(
+    argument_spec = dict(
+      apic_url=dict(required=True),
+      apic_user=dict(required=True),
+      apic_pass=dict(required=True),
+      tenant=dict(required=True),
+      override=dict(required=False, default=False),
+      logfile=dict(required=False, default=None),
+      timeout=dict(required=False, default=0)
+    ),
+    supports_check_mode = False
+  )
+
+  results = createnewtenant(module)
+
+  module.exit_json(**results)
+
+from ansible.module_utils.basic import *
+main()
