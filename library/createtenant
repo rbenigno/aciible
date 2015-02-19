@@ -18,7 +18,6 @@ def createnewtenant(module):
   import getopt
   import acitoolkit.acitoolkit as ACI
 
-
   # Connection information for the APIC
   URL = module.params['apic_url']
   USERID = module.params['apic_user']

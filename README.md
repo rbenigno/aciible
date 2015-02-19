@@ -1,8 +1,13 @@
-aciible
-================
+# Ansible for ACI (ansi4aci)
 
-Ansible playbook and modules for configure Cisco ACI.  At this point, all it does is create a tenant...
+## Description
+
+Ansible playbook and modules for configure Cisco ACI.  At this point, all it does is create a tenant.  This came about while sitting in a Cisco ACI class.
+
+Leverages acitoolkit: https://github.com/datacenter/acitoolkit
 
 Ansible Docs: http://docs.ansible.com
 
-Leverages acitoolkit: https://github.com/datacenter/acitoolkit
+# License
+
+This content is licensed under the MIT License.
